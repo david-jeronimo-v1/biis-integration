@@ -26,22 +26,26 @@
                        :body {:policyCode policy-code
                               :requestId  request-id
                               :request    {:voluntaryExcessAmount 0
-                                           :buildingsCoverAmount  360000.00
-                                           :contentsCoverAmount   25000.00
+                                           :buildingsCoverAmount  450000.00
+                                           :contentsCoverAmount   50000.00
+                                           :unspecifiedRiskAmount 3000.00
                                            :homeOfficeCoverAmount nil,
                                            :smallCraftCoverAmount nil}})
         send-request)))
 
 (defn get-temporary-quote [context]
-  (let [{:keys [policy-code request-id]} context]
-    (-> (assoc context :title "getTemporaryQuote"
-                       :url (str base-url "/home/adjustment/quote")
-                       :client-f client/post
-                       :body {:policyCode policy-code
-                              :requestId  request-id
-                              :StartDate  "2025-04-10T00:00:00"
-                              :StartTime  "2025-04-10T00:00:00"})
-        send-request)))
+  (let [{:keys [policy-code request-id]} context
+        result (-> (assoc context :title "getTemporaryQuote"
+                                  :url (str base-url "/home/adjustment/quote")
+                                  :client-f client/post
+                                  :body {:policyCode policy-code
+                                         :requestId  request-id
+                                         :StartDate  "2025-04-11T00:00:00"
+                                         :StartTime  "2025-04-11T00:00:00"})
+                   send-request)]
+    (if-let [refusal-reasons (seq (get-in result ["quotes" 0 "refusalReasons"]))]
+      (throw (ex-info "Temporary quote refused" refusal-reasons))
+      result)))
 
 (defn save-adjustment [context]
   (let [{:keys [policy-code cache-id temporary-quote-id]} context]
@@ -60,5 +64,6 @@
                        :body {:policyCode     policy-code
                               :quoteId        quote-id
                               :paymentDetails {:authorizationCode auth-code
-                                               :transactionId     transaction-id}})
+                                               :transactionId     transaction-id}
+                              })
         send-request)))

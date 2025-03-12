@@ -1,10 +1,10 @@
 (ns biis-integration.rest-client
   (:require [clojure.data.json :refer [read-str write-str]]
-            [clojure.pprint :refer [pprint]]))
+            [clojure.pprint :refer [pprint]])
+  (:use [biis-integration.util :only [log]]))
 
 (def defaultContext {:content-type :json
                      :debug        false})
-(def lock {})
 
 (defn send-request [context]
   (let [{:keys [url client-f policy-code token body
@@ -18,7 +18,7 @@
                        :content-type     content-type
                        :throw-exceptions false}]
 
-    (println policy-code " " title)
+    (log (str policy-code " " title))
     (spit (str "output/" policy-code "/" title "_request.txt")
           (with-out-str (pprint body)))
 
@@ -29,7 +29,5 @@
         200 (do (spit (str "output/" policy-code "/" title "_response.txt")
                       (with-out-str (pprint response-json)))
                 response-json)
-        (locking lock
-          (do (println (str "ERROR response " policy-code " " title " " status))
-              (pprint (or response-json response))
-              (throw (Exception. ^String title))))))))
+        (throw (ex-info (str title " " status)
+                        (or response-json response)))))))
