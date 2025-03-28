@@ -1,6 +1,6 @@
 (ns biis-integration.paysafe
   (:require [clj-http.client :as client])
-  (:use [biis-integration.config :only [paysafe-config]]
+  (:use [biis-integration.config.config :only [paysafe-config]]
         [biis-integration.rest-client :only [send-request]]))
 
 (def base-url "https://api.test.paysafe.com/cardpayments/v1")

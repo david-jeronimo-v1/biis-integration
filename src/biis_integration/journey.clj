@@ -1,7 +1,7 @@
 (ns biis-integration.journey
   (:require [biis-integration.applied.adjustment :refer [accept-adjustment get-temporary-quote save-adjustment
                                                          start-policy-adjustment update-cover-details]]
-            [biis-integration.applied.applied :refer [get-token]]
+            [biis-integration.applied.auth :refer [get-token]]
             [biis-integration.applied.home :refer [accept-quote get-home-policy]]
             [biis-integration.paysafe :refer [paysafe-auth]]
             [biis-integration.util :refer [delete-directory-recursive log with-context]]
@@ -11,26 +11,26 @@
   (:import (clojure.lang ExceptionInfo)
            (java.io File)))
 
+(defn in-cents [amount]
+  (-> amount (* 100) round))
+
 ; inclevy from wallet createQuote response
 (defn extract-wallet-quote-amount [quote-response]
   (some->> (get-in quote-response [0 "premium_details"])
            (filter #(= "INCLEVY" (get % "code")))
            first
            (#(get % "running_total"))
-           (* 100)
-           round))
+           in-cents))
 
 ; premium from applied getHomePolicy response
 (defn extract-quote-amount [quote-response]
   (some->> (get-in quote-response ["quote" "premium"])
-           (* 100)
-           round))
+           in-cents))
 
 ; premium from applied getTemporaryQuote response
 (defn extract-temporary-quote-premium [quote-response]
   (some->> (get-in quote-response ["quotes" 0 "premium"])
-           (* 100)
-           round))
+           in-cents))
 
 (defn run-journey [journey context]
   (when-not (.exists (File. "output"))
@@ -76,6 +76,7 @@
 (defn mta-adjust [context]
   (with-context
     context
+    get-token {:token "access_token"}
     get-home-policy {:quote-amount extract-quote-amount}
     start-policy-adjustment {:request-id "id"}
     update-cover-details nil

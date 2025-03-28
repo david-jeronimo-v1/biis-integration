@@ -1,6 +1,6 @@
-(ns biis-integration.applied.applied
+(ns biis-integration.applied.auth
   (:require [clj-http.client :as client])
-  (:use [biis-integration.config :only [applied-config]]
+  (:use [biis-integration.config.config :only [applied-config]]
         [biis-integration.rest-client :only [send-request]]))
 
 (def base-url "https://api-dev.apigee.appliedcloudservices.co.uk/v1")

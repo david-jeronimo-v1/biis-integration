@@ -1,4 +1,4 @@
-(ns biis-integration.config)
+(ns biis-integration.config.config)
 
 (def paysafe-config {:fbd-account-number ""
                      :username           ""
@@ -11,5 +11,3 @@
 (def wallet-config {:cognitoClientId ""
                     :username ""
                     :password ""})
-
-(def home-mta-config {:policy-codes ["RICR05001" "RIVA01001"]})

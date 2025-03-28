@@ -1,33 +1,20 @@
 (ns biis-integration.core
   (:use [biis-integration.applied.adjustment]
-        [biis-integration.applied.applied :only [get-token]]
-        [biis-integration.applied.home :only [get-home-policy]]
-        [biis-integration.config :only [home-mta-config]]
-        [biis-integration.journey :only [mta-adjust run-journey]]
-        [biis-integration.paysafe :only [paysafe-auth]]
-        [biis-integration.util :only [delete-directory-recursive log today tomorrow with-context]])
+        [biis-integration.config.input :only [input]]
+        [biis-integration.journey :only [run-journey]]
+        [biis-integration.util :only [delete-directory-recursive log]])
   (:import (java.io File)))
 
 (defn -main []
   (when (.exists (File. "output"))
     (delete-directory-recursive (File. "output")))
   (.mkdir (File. "output"))
-  (let [{:keys [policy-codes]} home-mta-config
-        {token "access_token"} (get-token {})
-        run-mta (fn [policy-code]
-                  (-> (run-journey mta-adjust
-                                   {:token                         token
-                                    :policy-code                   policy-code
-                                    :output-folder                 policy-code
-                                    :update-cover-details-override {:request
-                                                                    {:voluntaryExcessAmount 0
-                                                                     :buildingsCoverAmount  350000
-                                                                     :contentsCoverAmount   35000
-                                                                     :unspecifiedRiskAmount 3500
-                                                                     :specifiedItems        []}}
-                                    :temp-quote-start              tomorrow})
+  (let [{:keys [journey payloads log-keys]} input
+        run-mta (fn [payload]
+                  (-> (run-journey journey payload)
                       :context
-                      (select-keys [:policy-code :quote-amount :amount])
-                      log))]
-    (pmap run-mta policy-codes)
+                      (#(if log-keys (select-keys % log-keys)
+                                     %))))]
+    (->> (pmap run-mta payloads)
+         (run! log))
     (shutdown-agents)))
