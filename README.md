@@ -1,21 +1,60 @@
 # biis-integration
 
-Home MTA 
+Home MTA
 
-## Usage
+## Install
 
 Install Leiningen
 On Windows:
+
 * Download lein.bat: https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein.bat
 * Add it to path
 
-Config: [config.clj](src/config.clj)
+For IntelliJ:
+
+* Install Cursive plugin
+
+## Configure
+
+Config: [config.clj](src/biis_integration/config/config.clj)
+
+Input: [input.clj](src/biis_integration/config/input.clj)
+
+* Specify a journey and the keys you want to log (optional)
+* Set the payloads that you want to ingest into the journey. Different options for each one.
+
+## Available journeys
+
+### [mta-adjust](src/biis_integration/journey.clj#L76)
+This journey will retrieve an existing quote and apply the specified adjustment to get a temporary quote.
+The adjustment won't be saved in Applied
+* policy-code
+* output-folder
+* update-cover-details-override (to override updateCoverDetails request) [spec](https://appliedsystems.stoplight.io/docs/applied-connect-api/33f5384174c15-adjustment-cover-details)
+* temp-quote-start (to override getTemporaryQuote start date) [spec](https://appliedsystems.stoplight.io/docs/applied-connect-api/kji37kw3z9wai-adjustment-quote)
+
+### [full-mta-journey](src/biis_integration/journey.clj#L50)
+1. Create a quote in the wallet
+1. bind it in Applied
+1. apply and save adjustment
+1. if the new amount is greater than zero, pay for it and accept the adjustment
+
+Required fields (see [integration tests](test/biis_integration/full_home_mta_journey_test.clj):
+* output-folder
+* create-quote-override Override the [sample request](resources/createQuote.request.json) to create the quote
+* update-cover-details-override (to override updateCoverDetails request) [spec](https://appliedsystems.stoplight.io/docs/applied-connect-api/33f5384174c15-adjustment-cover-details)
+* temp-quote-start (to override getTemporaryQuote start date) [spec](https://appliedsystems.stoplight.io/docs/applied-connect-api/kji37kw3z9wai-adjustment-quote)
+
+## Run
 
 Run:
+
 * lein.bat run
 
-Output: Under 'location' folder. One folder created for each policy code
+Run unit tests:
+* lein.bat test
 
+Output: Under 'location' folder. One folder created for each entry in [input](src/biis_integration/config/input.clj), as specified in the output-folder property
 
 ## License
 
