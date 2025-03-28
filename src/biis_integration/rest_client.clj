@@ -7,27 +7,32 @@
                      :debug        false})
 
 (defn send-request [context]
-  (let [{:keys [url client-f policy-code token body
-                debug username password title content-type]} (into defaultContext context)
+  (let [{:keys [url client-f policy-code token body headers
+                debug username password title content-type
+                output-folder]} (into defaultContext context)
         client-config {:oauth-token      token
                        :basic-auth       (when username [username password])
-                       :body             (if (= content-type :json)
+                       :body             (if (contains? #{:json "application/x-amz-json-1.1"} content-type)
                                            (some-> body write-str)
                                            body)
                        :debug            debug
                        :content-type     content-type
+                       :headers          headers
                        :throw-exceptions false}]
 
     (log (str policy-code " " title))
-    (spit (str "output/" policy-code "/" title "_request.txt")
+    (spit (str "output/" output-folder "/" title "_request.edn")
           (with-out-str (pprint body)))
 
     (let [response (-> (client-f url client-config))
           {:keys [status]} response
-          response-json (some-> response :body read-str)]
+          try-parse (fn [str] (try (read-str str)
+                                   (catch Exception _ response)))
+          response-json (some->> response :body try-parse)]
       (case status
-        200 (do (spit (str "output/" policy-code "/" title "_response.txt")
+        200 (do (spit (str "output/" output-folder "/" title "_response.edn")
                       (with-out-str (pprint response-json)))
                 response-json)
         (throw (ex-info (str title " " status)
-                        (or response-json response)))))))
+                        {:response (or response-json response)
+                         :context context}))))))

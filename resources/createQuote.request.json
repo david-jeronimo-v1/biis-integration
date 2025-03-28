@@ -1,0 +1,150 @@
+{
+  "product": "Blue Grizzly Object Model",
+  "version": "0.1",
+  "honeypot_value": "",
+  "marketing_consent": "",
+  "marketings": {
+    "email_consent": false,
+    "post_consent": false,
+    "mobile_sms_consent": false,
+    "phone_consent": false
+  },
+  "analyse_transactions": false,
+  "home_quote": {
+    "carrier_id": "0012J",
+    "created_by": "",
+    "channel": "web",
+    "promotion_code": "",
+    "staff_number": "",
+    "policy_holder_details": {
+      "title": "MR",
+      "other_title": "",
+      "first_name": "David",
+      "last_name": "Jeronimo",
+      "email": "david.jeronimo@version1.com",
+      "date_of_birth": "1980-10-10",
+      "mobile_phone": "0878787878",
+      "home_phone": "0878787878",
+      "work_phone": "0878787878",
+      "previous_insurer": "Other",
+      "primary_address": {
+        "is_correspondence_address": false,
+        "address_line1": "Corks",
+        "address_line2": "Unit 1, Hunter's Court",
+        "address_line3": "Ashbourne",
+        "town": "Ashbourne",
+        "post_code": "A84DX72",
+        "county": "Meath",
+        "eircode": "A84DX72",
+        "geo_code": "60024922",
+        "match_level": "200",
+        "match_type": "building",
+        "ecad_identifier": "1900130412",
+        "ecad_match_level": "3",
+        "ecad_match_result": "100",
+        "street_name": "Unit 1, Hunter's Court",
+        "reference": "UULWZ7H76D77MAQC",
+        "lookup_response": "<location type=\"building\" territory=\"SPIKE_GAMMA\" score=\"100\" xmlns=\"http://service.autoaddress.ie/\"><point x=\"306479.3\" y=\"252334.8\" coord-sys=\"ING\" /><info ecadId=\"1900130412\" eircode=\"A84DX72\" Autoaddressid=\"UULWZ7H76D77MAQC\" geover=\"Q424\" geotype=\"A\" georef=\"60024922\" name=\"\" text=\"CORKS, Unit 1,Hunter's Court,Ashbourne,Co. Meath\" addr1=\"CORKS, Unit 1\" addr2=\"Hunter's Court\" addr3=\"Ashbourne\" addr4=\"Co. Meath\" matchLevel=\"200\" matchResult=\"100\" aa2MatchLevel=\"3\" aa2MatchResult=\"100\" smallarea=\"167025021\" ecadSmallarea=\"14634\" /></location>"
+      },
+      "mortgage_reference": "",
+      "has_boi_mortgage": true,
+      "has_boi_personal_loan": false,
+      "has_boi_motor_insurance": false,
+      "has_boi_pension": false,
+      "is_boi_customer": "true",
+      "first_time_buyer": "false",
+      "mortgage_provider": "1390"
+    },
+    "cover_details": {
+      "start_date": "2025-05-01T00:00:00",
+      "premium": 270,
+      "buildings_amount": 175000,
+      "contents_amount": 15000,
+      "excess_amount": 500,
+      "contact_preference": "CUSTOMER_PORTAL",
+      "contents_accidental_damage_cover": false,
+      "no_claim_discount_cover": false,
+      "home_emergency_assist_cover": false,
+      "ncd_num_years": "3",
+      "additional_policy_holders_details": [],
+      "unspecified_personal_items_amount": 0,
+      "specified_items": [],
+      "mortice_locks": "yes",
+      "risk_address": {
+        "address_line1": "Corks",
+        "address_line2": "Unit 1, Hunter's Court",
+        "address_line4": "Meath",
+        "town": "Ashbourne",
+        "post_code": "A84DX72",
+        "num_bedrooms": 3,
+        "num_bathrooms": 1,
+        "year_of_construction": "1990",
+        "construction_type": "Standard Construction",
+        "is_occupied": "yes",
+        "alarm_type": "No alarm fitted",
+        "neighbourhood_watch": "Yes",
+        "num_smoke_alarms": 2,
+        "home_type": "Detached house",
+        "dwelling_type": "Owner Occupied",
+        "mortgage_discount": "false",
+        "roof_tile": true,
+        "listed_or_protected": false,
+        "operational_locks": true,
+        "un_occupied": false,
+        "heating_type": "Electric"
+      },
+      "has_claims": "false",
+      "claims_details": []
+    },
+    "assumptions": [
+      {
+        "code": 23,
+        "response": true
+      },
+      {
+        "code": 19,
+        "response": false
+      },
+      {
+        "code": 33,
+        "response": false
+      },
+      {
+        "code": 43,
+        "response": false
+      },
+      {
+        "code": 47,
+        "response": true
+      },
+      {
+        "code": 51,
+        "response": true
+      },
+      {
+        "code": 52,
+        "response": false
+      },
+      {
+        "code": 53,
+        "response": false
+      },
+      {
+        "code": 54,
+        "response": false
+      },
+      {
+        "code": 55,
+        "response": false
+      },
+      {
+        "code": 56,
+        "response": false
+      },
+      {
+        "code": 99,
+        "response": false
+      }
+    ]
+  }
+}

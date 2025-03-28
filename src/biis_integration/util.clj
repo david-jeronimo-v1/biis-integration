@@ -1,5 +1,8 @@
 (ns biis-integration.util
-  (:use [clojure.pprint :refer [pprint]]))
+  (:require [clojure.java.io :as io]
+            [java-time.api :as jt])
+  (:use [clojure.pprint :refer [pprint]])
+  (:import (java.io File)))
 
 (defn process [context [f bindings]]
   (let [result (f context)
@@ -19,6 +22,28 @@
     (if ex
       (do (println "--------" entry "----------")
           (println (ex-message ex))
-          (pprint (ex-data ex))
+          (pprint (-> ex ex-data :response))
           (println "================================"))
       (println entry))))
+
+(defn delete-directory-recursive [^File file]
+  (when (.isDirectory file)
+    (run! delete-directory-recursive (.listFiles file)))
+  (io/delete-file file))
+
+(defn deep-merge [v & vs]
+  (letfn [(rec-merge [v1 v2]
+            (if (and (map? v1) (map? v2))
+              (merge-with deep-merge v1 v2)
+              v2))]
+    (when (some identity vs)
+      (reduce #(rec-merge %1 %2) v vs))))
+
+(defn format-date [d]
+  (->> (jt/truncate-to d :days) (jt/format "yyyy-MM-dd'T'HH:mm:ss")))
+
+(def today (-> (jt/local-date-time) format-date))
+
+(def tomorrow (-> (jt/local-date-time)
+                  (jt/plus (jt/days 1))
+                  format-date))

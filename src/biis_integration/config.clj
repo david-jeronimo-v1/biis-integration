@@ -8,4 +8,8 @@
 (def applied-config {:username ""
                      :password ""})
 
-(def home-mta-config {:policy-codes ["CIQB01001" "HAVB03001"]})
+(def wallet-config {:cognitoClientId ""
+                    :username ""
+                    :password ""})
+
+(def home-mta-config {:policy-codes ["RICR05001" "RIVA01001"]})
