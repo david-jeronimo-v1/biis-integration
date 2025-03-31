@@ -1,7 +1,7 @@
 (ns biis-integration.applied.adjustment
-  (:require [biis-integration.util :refer [deep-merge]]
-            [clj-http.client :as client])
-  (:use [biis-integration.rest-client :only [send-request]]))
+  (:require [biis-integration.rest-client :refer [send-request]]
+            [biis-integration.util :refer [deep-merge]]
+            [clj-http.client :as client]))
 
 (def base-url "https://api-dev.apigee.appliedcloudservices.co.uk/applied-api-connect/v1/home/adjustment")
 

@@ -1,7 +1,7 @@
 (ns biis-integration.rest-client
-  (:require [clojure.data.json :refer [read-str write-str]]
-            [clojure.pprint :refer [pprint]])
-  (:use [biis-integration.util :only [log]]))
+  (:require [biis-integration.util :refer [log]]
+            [clojure.data.json :refer [read-str write-str]]
+            [clojure.pprint :refer [pprint]]))
 
 (def defaultContext {:content-type :json
                      :debug        false})
@@ -35,4 +35,4 @@
                 response-json)
         (throw (ex-info (str title " " status)
                         {:response (or response-json response)
-                         :context context}))))))
+                         :context  context}))))))

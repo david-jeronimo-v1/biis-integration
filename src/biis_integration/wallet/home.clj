@@ -1,8 +1,8 @@
 (ns biis-integration.wallet.home
-  (:require [clj-http.client :as client]
-            [clojure.data.json :refer [read-str]]
-            [biis-integration.util :refer [deep-merge]])
-  (:use [biis-integration.rest-client :only [send-request]]))
+  (:require [biis-integration.rest-client :refer [send-request]]
+            [biis-integration.util :refer [deep-merge]]
+            [clj-http.client :as client]
+            [clojure.data.json :refer [read-str]]))
 
 (def base-url "https://api.ecommerce.ci.bluegrizzly-biis.io")
 

@@ -1,7 +1,7 @@
 (ns biis-integration.wallet.auth
-  (:require [clj-http.client])
-  (:use [biis-integration.rest-client :only [send-request]]
-        [biis-integration.config.config :only [wallet-config]]))
+  (:require [biis-integration.config.config :refer [wallet-config]]
+            [biis-integration.rest-client :refer [send-request]]
+            [clj-http.client]))
 
 (defn get-wallet-token [context]
   (let [url "https://cognito-idp.eu-west-1.amazonaws.com/oauth2/token"

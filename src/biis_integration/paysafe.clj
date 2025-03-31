@@ -1,7 +1,8 @@
 (ns biis-integration.paysafe
-  (:require [clj-http.client :as client])
-  (:use [biis-integration.config.config :only [paysafe-config]]
-        [biis-integration.rest-client :only [send-request]]))
+  (:require [biis-integration.config.config :refer [paysafe-config]]
+            [biis-integration.rest-client :refer [send-request]]
+            [clj-http.client :as client]
+            [clojure.math :refer [round]]))
 
 (def base-url "https://api.test.paysafe.com/cardpayments/v1")
 
@@ -9,7 +10,7 @@
   (let [{:keys [request-id requests amount]} context
         {:keys [fbd-account-number username password card-number]} paysafe-config
         auth-request {:merchantRefNum request-id
-                      :amount         amount
+                      :amount         (-> amount (* 100) round)
                       :settleWithAuth true
                       :card           {:cardNum    card-number
                                        :cardExpiry {:month 12

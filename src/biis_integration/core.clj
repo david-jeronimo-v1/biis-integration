@@ -1,20 +1,16 @@
 (ns biis-integration.core
-  (:use [biis-integration.applied.adjustment]
-        [biis-integration.config.input :only [input]]
-        [biis-integration.journey :only [run-journey]]
-        [biis-integration.util :only [delete-directory-recursive log]])
-  (:import (java.io File)))
+  (:require [biis-integration.config.input :refer [input]]
+            [biis-integration.journey :refer [run-journey]]
+            [biis-integration.util :refer [log truncate-folder]]))
 
 (defn -main []
-  (when (.exists (File. "output"))
-    (delete-directory-recursive (File. "output")))
-  (.mkdir (File. "output"))
+  (truncate-folder "output")
   (let [{:keys [journey payloads log-keys]} input
-        run-mta (fn [payload]
-                  (-> (run-journey journey payload)
-                      :context
-                      (#(if log-keys (select-keys % log-keys)
-                                     %))))]
-    (->> (pmap run-mta payloads)
+        run-payload (fn [payload]
+                      (-> (run-journey journey payload)
+                          :context
+                          (#(if log-keys (select-keys % log-keys)
+                                         %))))]
+    (->> (pmap run-payload payloads)
          (run! log))
     (shutdown-agents)))

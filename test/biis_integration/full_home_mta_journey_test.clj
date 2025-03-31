@@ -29,7 +29,7 @@
           {:keys [quote-amount amount]} context]
       (is (= 500 (-> error (get "status"))))
       (is (= "acceptAdjustment 500" error-message))
-      (is (= 37997 quote-amount))
+      (is (= 379.97 quote-amount))
       (is (> amount 0))
 
       (log (select-keys context [:policy-code :quote-amount :amount])))))
@@ -60,7 +60,7 @@
           {:keys [quote-amount amount]} context]
       (is (= 500 (-> error (get "status"))))
       (is (= "acceptAdjustment 500" error-message))
-      (is (= 37997 quote-amount))
+      (is (= 379.97 quote-amount))
       (is (> amount 0))
 
       (log (select-keys context [:policy-code :quote-amount :amount])))))
@@ -91,7 +91,7 @@
           {:keys [quote-amount amount]} context]
 
       (is (nil? error))
-      (is (= 37997 quote-amount))
+      (is (= 379.97 quote-amount))
       (is (zero? amount))
 
       (log (select-keys context [:policy-code :quote-amount :amount])))))
@@ -122,7 +122,7 @@
           {:keys [quote-amount amount]} context]
 
       (is (nil? error))
-      (is (< 37000 quote-amount 44000))
+      (is (< 370 quote-amount 440))
       (is (< amount 0))
 
       (log (select-keys context [:policy-code :quote-amount :amount])))))

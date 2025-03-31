@@ -25,7 +25,7 @@ Input: [input.clj](src/biis_integration/config/input.clj)
 
 ## Available journeys
 
-### [mta-adjust](src/biis_integration/journey.clj#L76)
+### [mta-adjust](src/biis_integration/journey.clj#L48)
 This journey will retrieve an existing quote and apply the specified adjustment to get a temporary quote.
 The adjustment won't be saved in Applied
 * policy-code
@@ -33,7 +33,7 @@ The adjustment won't be saved in Applied
 * update-cover-details-override (to override updateCoverDetails request) [spec](https://appliedsystems.stoplight.io/docs/applied-connect-api/33f5384174c15-adjustment-cover-details)
 * temp-quote-start (to override getTemporaryQuote start date) [spec](https://appliedsystems.stoplight.io/docs/applied-connect-api/kji37kw3z9wai-adjustment-quote)
 
-### [full-mta-journey](src/biis_integration/journey.clj#L50)
+### [full-mta-journey](src/biis_integration/journey.clj#L24)
 1. Create a quote in the wallet
 1. bind it in Applied
 1. apply and save adjustment
