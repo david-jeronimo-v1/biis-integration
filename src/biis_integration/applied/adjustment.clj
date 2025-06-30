@@ -22,6 +22,16 @@
                                          update-cover-details-override))
         send-request)))
 
+(defn update-contact-details [context]
+  (let [{:keys [policy-code request-id update-contact-details-override]} context]
+    (-> (assoc context :title "updateContactDetails"
+                       :url (str base-url "/proposer/contact-details")
+                       :client-f client/patch
+                       :body (deep-merge {:requestId  request-id
+                                          :policyCode policy-code}
+                                         update-contact-details-override))
+        send-request)))
+
 (defn get-temporary-quote [context]
   (let [{:keys [policy-code request-id temp-quote-start]} context
         result (-> (assoc context :title "getTemporaryQuote"
@@ -53,5 +63,7 @@
                        :body {:policyCode     policy-code
                               :quoteId        quote-id
                               :paymentDetails {:authorizationCode auth-code
-                                               :transactionId     transaction-id}})
+                                               :transactionId     transaction-id}
+                              }
+                       )
         send-request)))

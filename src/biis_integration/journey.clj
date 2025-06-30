@@ -1,6 +1,6 @@
 (ns biis-integration.journey
   (:require [biis-integration.applied.adjustment :refer [accept-adjustment get-temporary-quote save-adjustment
-                                                         start-policy-adjustment update-cover-details]]
+                                                         start-policy-adjustment update-contact-details update-cover-details]]
             [biis-integration.applied.auth :refer [get-token]]
             [biis-integration.applied.home :refer [accept-quote get-home-policy]]
             [biis-integration.paysafe :refer [paysafe-auth]]
@@ -53,3 +53,25 @@
     start-policy-adjustment {:request-id "id"}
     update-cover-details nil
     get-temporary-quote {:amount ["quotes" 0 "premium"]}))
+
+(defn update-email [context]
+  (-> (enrich
+        context
+        get-wallet-token {:token ["AuthenticationResult" "AccessToken"]}
+        create-quote {:policy-code  [0 "policy_code"]
+                      :request-id   [0 "policy_id"]
+                      :quote-id     [0 "quote_reference"]
+                      :quote-amount [0 "cover_premium"]
+                      :amount       [0 "cover_premium"]}
+        paysafe-auth {:auth-code      "authCode"
+                      :transaction-id "id"}
+        get-token {:token "access_token"}
+        accept-quote nil
+        start-policy-adjustment {:request-id "id"}
+        update-contact-details nil
+        get-temporary-quote {:cache-id           "cacheId"
+                             :temporary-quote-id ["quotes" 0 "temporaryId"]
+                             :amount             ["quotes" 0 "premium"]}
+        save-adjustment {:quote-id "quoteId"}
+        accept-adjustment nil
+        get-home-policy {:updated-email ["request" "proposer" "email"]})))

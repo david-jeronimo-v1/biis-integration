@@ -31,7 +31,8 @@
           (println (ex-message ex))
           (pprint (-> ex ex-data :response))
           (println "================================"))
-      (println entry))))
+      (if (map? entry) (pprint entry)
+                       (println entry)))))
 
 (defn create-folder [^String path]
   (let [folder (File. path)]
