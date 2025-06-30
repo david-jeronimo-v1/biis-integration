@@ -62,8 +62,7 @@
                        :client-f client/post
                        :body {:policyCode     policy-code
                               :quoteId        quote-id
-                              :paymentDetails {:authorizationCode auth-code
-                                               :transactionId     transaction-id}
-                              }
-                       )
+                              :paymentDetails (when auth-code
+                                                {:authorizationCode auth-code
+                                                 :transactionId     transaction-id})})
         send-request)))
