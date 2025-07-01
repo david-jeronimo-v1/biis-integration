@@ -72,6 +72,7 @@
         get-temporary-quote {:cache-id           "cacheId"
                              :temporary-quote-id ["quotes" 0 "temporaryId"]
                              :amount             ["quotes" 0 "premium"]}
+        identity {:auth-code (constantly nil)}
         save-adjustment {:quote-id "quoteId"}
         accept-adjustment nil
         get-home-policy {:updated-email ["request" "proposer" "email"]})))

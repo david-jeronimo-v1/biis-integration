@@ -29,7 +29,9 @@
     (if ex
       (do (println "--------" entry "----------")
           (println (ex-message ex))
-          (pprint (-> ex ex-data :response))
+          (pprint (-> ex
+                      ex-data
+                      ((some-fn :response identity))))
           (println "================================"))
       (if (map? entry) (pprint entry)
                        (println entry)))))
