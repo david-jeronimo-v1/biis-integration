@@ -21,9 +21,18 @@
               :error-message (ex-message e)
               :error         response})))))
 
+(defn map-insurer [code]
+  (case code "B73001" :fbd
+             "B67005" :rsa))
+
+(defn get-insurer-from-home-policy [home-policy]
+  (-> (get-in home-policy ["quote" "schemeCode"])
+      map-insurer))
+
 (defn full-mta-journey [context]
   (-> (enrich
         context
+        identity {:insurer (constantly :fbd)}
         get-wallet-token {:token ["AuthenticationResult" "AccessToken"]}
         create-quote {:policy-code  [0 "policy_code"]
                       :request-id   [0 "policy_id"]
@@ -34,6 +43,7 @@
                       :transaction-id "id"}
         get-token {:token "access_token"}
         accept-quote nil
+        get-home-policy {:quote-amount ["quote" "premium"]}
         start-policy-adjustment {:request-id "id"}
         update-cover-details nil
         get-temporary-quote {:cache-id           "cacheId"
@@ -53,6 +63,23 @@
     start-policy-adjustment {:request-id "id"}
     update-cover-details nil
     get-temporary-quote {:amount ["quotes" 0 "premium"]}))
+
+(defn mta-adjust-and-accept [context]
+  (-> (enrich
+        context
+        get-token {:token "access_token"}
+        get-home-policy {:quote-amount ["quote" "premium"]
+                         :insurer      get-insurer-from-home-policy}
+        start-policy-adjustment {:request-id "id"}
+        update-cover-details nil
+        get-temporary-quote {:cache-id           "cacheId"
+                             :temporary-quote-id ["quotes" 0 "temporaryId"]
+                             :amount             ["quotes" 0 "premium"]}
+        save-adjustment {:quote-id "quoteId"})
+      (enrich-when (comp pos? :amount)
+                   paysafe-auth {:auth-code      "authCode"
+                                 :transaction-id "id"}
+                   accept-adjustment nil)))
 
 (defn update-email [context]
   (-> (enrich

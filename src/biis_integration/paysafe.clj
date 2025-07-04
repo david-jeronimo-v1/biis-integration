@@ -7,14 +7,15 @@
 (def base-url "https://api.test.paysafe.com/cardpayments/v1")
 
 (defn paysafe-auth [context]
-  (let [{:keys [request-id requests amount]} context
-        {:keys [fbd-account-number username password card-number]} paysafe-config
+  (let [{:keys [request-id requests amount insurer]} context
+        {:keys [card-number]} paysafe-config
+        {:keys [account-number username password]} (get paysafe-config insurer)
         auth-request {:merchantRefNum request-id
                       :amount         (-> amount (* 100) round)
                       :settleWithAuth true
                       :card           {:cardNum    card-number
                                        :cardExpiry {:month 12
-                                                    :year  2025}
+                                                    :year  2028}
                                        :cvv        123}
                       :profile        {:firstName "Joe"
                                        :lastName  "Smith"
@@ -30,6 +31,6 @@
                        :username username
                        :password password
                        :client-f client/post
-                       :url (str base-url "/accounts/" fbd-account-number "/auths")
+                       :url (str base-url "/accounts/" account-number "/auths")
                        :body body)
         send-request)))

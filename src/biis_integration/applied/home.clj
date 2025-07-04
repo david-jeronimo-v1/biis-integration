@@ -1,8 +1,9 @@
 (ns biis-integration.applied.home
   (:require [biis-integration.rest-client :refer [send-request]]
-            [clj-http.client :as client]))
+            [clj-http.client :as client]
+            [biis-integration.config.config :refer [applied-config]]))
 
-(def base-url "https://api-dev.apigee.appliedcloudservices.co.uk/applied-api-connect/v1/home")
+(def base-url (-> applied-config :url (str "/home")))
 
 (defn get-home-policy [context]
   (let [{:keys [policy-code]} context]

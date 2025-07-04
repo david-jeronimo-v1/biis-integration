@@ -1,10 +1,11 @@
 (ns biis-integration.wallet.home
-  (:require [biis-integration.rest-client :refer [send-request]]
-            [biis-integration.util :refer [deep-merge today]]
+  (:require [biis-integration.config.config :refer [wallet-config]]
+            [biis-integration.rest-client :refer [send-request]]
+            [biis-integration.util :refer [deep-merge]]
             [clj-http.client :as client]
             [clojure.data.json :refer [read-str]]))
 
-(def base-url "https://api.ecommerce.ci.bluegrizzly-biis.io/home")
+(def base-url (-> wallet-config :url (str "/home")))
 
 (defn create-quote [context]
   (let [override (get-in context [:create-quote-override])

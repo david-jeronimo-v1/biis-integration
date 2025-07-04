@@ -1,9 +1,10 @@
 (ns biis-integration.applied.adjustment
   (:require [biis-integration.rest-client :refer [send-request]]
             [biis-integration.util :refer [deep-merge]]
+            [biis-integration.config.config :refer [applied-config]]
             [clj-http.client :as client]))
 
-(def base-url "https://api-dev.apigee.appliedcloudservices.co.uk/applied-api-connect/v1/home/adjustment")
+(def base-url (-> applied-config :url (str "/home/adjustment")))
 
 (defn start-policy-adjustment [context]
   (let [{:keys [policy-code]} context]

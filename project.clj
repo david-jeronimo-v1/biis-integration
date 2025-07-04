@@ -6,6 +6,7 @@
   :dependencies [[org.clojure/clojure "1.12.0"]
                  [clj-http "3.13.0"]
                  [org.clojure/data.json "2.5.1"]
+                 [cheshire "6.0.0"]
                  [clojure.java-time "1.4.3"]
                  [org.apache.logging.log4j/log4j-api "2.11.0"]
                  [org.apache.logging.log4j/log4j-core "2.11.0"]
